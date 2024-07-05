@@ -1,0 +1,130 @@
+﻿@model ICollection<MVC.Models.SkillVM>
+
+@{
+    ViewData["Title"] = "All Skills";
+}
+
+
+<div class="container p-2">
+    <div class="row mt-3">
+        <div class="col-6">
+            <h2 class="text-primary">List of all skills</h2>
+        </div>
+        <div class="col-6 text-end">
+            <button type="button" class="btn btn-primary" id="loadCreateModalButton">
+                <i class="bi bi-plus-square"></i> &nbsp; Create New Skill
+            </button>
+        </div>
+    </div>
+    <br />
+
+    <div id="skillList">
+        @await Html.PartialAsync("_ListPartial", Model)
+    </div>
+</div>
+
+<div id="modalPlaceholder"></div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#loadCreateModalButton').click(function () {
+                $.ajax({
+                    url: '@Url.Action("Create", "Skill")',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#modalPlaceholder').html(data);
+                        $('#Create').modal('show');
+                        $.validator.unobtrusive.parse('#Create form');
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred while loading the modal: " + xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('click', '.edit-button', function () {
+                var skillId = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("Edit", "Skill")',
+                    type: 'GET',
+                    data: { id: skillId },
+                    success: function (data) {
+                        $('#modalPlaceholder').html(data);
+                        $('#Edit').modal('show');
+                        $.validator.unobtrusive.parse('#Edit form');
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred while loading the modal: " + xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('click', '.delete-button', function () {
+                var skillId = $(this).data('id');
+                if (confirm("Are you sure you want to delete this skill?")) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Skill")',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                            id: skillId
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                refreshSkillList();
+                                showToast(data.message, data.type);
+                            } else {
+                                showToast(data.message, 'error');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("An error occurred while deleting the skill: " + xhr.responseText);
+                        }
+                    });
+                }
+            });
+
+            $(document).on('submit', 'form', function (event) {
+                event.preventDefault();
+                var form = $(this);
+                if (form.valid()) {
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: form.attr('method'),
+                        data: form.serialize(),
+                        success: function (data) {
+                            if (data.success) {
+                                $('#modalPlaceholder .modal').modal('hide');
+                                refreshSkillList();
+                                showToast(data.message, data.type);
+                            } else {
+                                showToast(data.message, 'error');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("An error occurred: " + xhr.responseText);
+                        }
+                    });
+                }
+            });
+
+            function refreshSkillList() {
+                $.ajax({
+                    url: '@Url.Action("ListPartial", "Skill")',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#skillList').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred while refreshing the skill list: " + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+    </script>
+
+    <script src="~/js/Warning.js"></script>
+}

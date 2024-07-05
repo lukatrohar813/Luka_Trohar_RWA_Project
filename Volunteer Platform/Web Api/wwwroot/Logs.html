@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Log List</title>
+	<link rel="stylesheet" href="logs.css">
+</head>
+<body>
+<div class="container">
+	<header class="header">
+		<h1>Log list</h1>
+		<button id="logout-button" onclick="logout()">Logout</button>
+	</header>
+
+	<div id="log-list" class="log-list">
+		<ul id="logs">
+			
+		</ul>
+	</div>
+
+	<footer class="footer">
+		<div class="actions">
+			<select id="log-count">
+				<option value="10">10</option>
+				<option value="25" selected>25</option>
+				<option value="50">50</option>
+			</select>
+			<button id="show-logs-button" onclick="showLogs()">Show Logs</button>
+		</div>
+	</footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="logs.js"></script>
+</body>
+</html>

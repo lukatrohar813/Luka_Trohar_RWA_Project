@@ -1,0 +1,118 @@
+﻿@model MVC.Models.ProjectDetailsVM
+<link rel="stylesheet" href="~/css/standardizedImage.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/details.css" asp-append-version="true" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container p-4">
+    <div class="project-header">
+        <h2>@Model.Name</h2>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="image-container mb-4">
+                    <img src="@Model.ImageFilePath" class="standardized-image img-fluid" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <p class="text-primary h5">Description:</p>
+                <p class="text-muted">@Model.Description</p>
+                <p class="text-primary h5">Type:</p>
+                <p class="text-muted">@Model.TypeName</p>
+                <p class="text-primary h5">Start of project:</p>
+                <p class="text-muted">@Model.StartDate.ToString("dd.MM.yyyy")</p>
+                <p class="text-primary h5">End of project:</p>
+                <p class="text-muted">@Model.EndDate.ToString("dd.MM.yyyy")</p>
+                <p class="text-primary h5">Skills Required:</p>
+                <ul>
+	                @if (Model.Skills != null && Model.Skills.Count > 0)
+	                {
+		                @foreach (var skill in Model.Skills)
+		                {
+			                <li class="text-muted">@skill</li>
+		                }
+	                }
+	                else
+	                {
+		                <p class="text-muted">No skills required.</p>
+	                }
+                </ul>
+                <p class="text-primary h5">Users singed up to this project:</p>
+                @if (Model.Users != null && Model.Users.Count > 0)
+                {
+	                <p class="text-muted">@Model.Users.Count</p>
+                }
+                else
+                {
+	                <p class="text-muted">No users have currently signed up to this project.</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <div class="button-container">
+                @if (Model.IsUserSignedToProject == true)
+                {
+                    <form id="signOffForm" asp-action="SignOff" asp-controller="Application" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="projectId" value="@Model.Id" />
+                        <button type="button" class="btn btn-danger btn-lg" onclick="confirmSignOff()">Sign off</button>
+                    </form>
+                }
+                else
+                {
+                    <form id="signUpForm" asp-action="SignUp" asp-controller="Application" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="projectId" value="@Model.Id" />
+                        <button type="button" class="btn btn-custom btn-lg" onclick="confirmSignUp()">Sign up</button>
+                    </form>
+                }
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Project" asp-action="ListAdmin" class="btn btn-back btn-lg">Back</a>
+                }
+                else
+                {
+                    <a asp-controller="Project" asp-action="List" class="btn btn-back btn-lg">Back</a>
+                }
+            </div>
+        </div>
+    </div>
+   
+          
+       
+    
+    @if (TempData["SignUpMessage"] != null)
+    {
+        <div class="alert alert-info text-center">
+            @TempData["SignUpMessage"]
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function confirmSignUp() {
+            if (confirm("Are you sure you want to sign up for this project?")) {
+                document.getElementById("signUpForm").submit();
+            }
+        }
+
+        function confirmSignOff() {
+            if (confirm("Are you sure you want to sign off from this project?")) {
+                document.getElementById("signOffForm").submit();
+            }
+        }
+    </script>
+}

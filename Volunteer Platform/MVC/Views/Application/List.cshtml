@@ -1,0 +1,92 @@
+﻿@model ICollection<BL.Models.ApplicationDto>
+
+@{
+    ViewData["Title"] = "All Applications";
+}
+
+<div class="container p-2">
+    <div class="row mt-3">
+        <div class="col-6">
+            <h2 class="text-primary">Project Applications</h2>
+        </div>
+        <div class="col-6 text-end">
+        </div>
+    </div>
+    <br />
+
+    <div id="applicationsListPlaceholder">
+        <partial name="_ListPartial" model="Model"></partial>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.approve-button', function () {
+                var button = $(this);
+                var applicationId = button.data('id');
+                updateApplicationStatus(applicationId, 'Approved');
+            });
+
+            $(document).on('click', '.deny-button', function () {
+                var button = $(this);
+                var applicationId = button.data('id');
+                updateApplicationStatus(applicationId, 'Denied');
+            });
+
+            function updateApplicationStatus(id, status) {
+                $.ajax({
+                    url: '@Url.Action("UpdateStatus", "Application")',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            var row = $('tr[data-id="' + id + '"]');
+                            row.find('.status').text(response.status);
+                            updateRowColor(row, response.status);
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            }
+            function updateRowColor(row, status) {
+                row.removeClass('table-success table-warning table-danger');
+                switch (status) {
+                    case 'Approved':
+                        row.addClass('table-success');
+                        break;
+                    case 'Pending':
+                        row.addClass('table-warning');
+                        break;
+                    case 'Denied':
+                        row.addClass('table-danger');
+                        break;
+                    default:
+                        break;
+                }
+            }
+            function updateApplicationsList() {
+                $.ajax({
+                    url: '@Url.Action("ListPartial", "Application")',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#applicationsListPlaceholder').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred while updating the list: " + xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+}

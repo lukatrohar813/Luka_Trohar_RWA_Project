@@ -1,0 +1,77 @@
+﻿@model MVC.Models.ProjectEditVM
+<link rel="stylesheet" href="~/css/standardizedImage.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Project</h1>
+
+<hr />
+<form asp-action="Edit" method="post" enctype="multipart/form-data" id="projectForm">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name:</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label">Type:</label>
+                <select asp-for="TypeId" asp-items="ViewBag.TypeDdlItems" class="form-select">
+                    <option value="">(not selected)</option>
+                </select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description:</label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Start Date:</label>
+                <input asp-for="StartDate" class="form-control" id="StartDate" type="datetime-local" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">End Date:</label>
+                <input asp-for="EndDate" class="form-control" id="EndDate" type="datetime-local" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="image-container mb-4">
+                    <div class="image-label">Current Image:</div>
+                    <img src="@Model.ImageFilePath" class="standardized-image" />
+                    <input type="hidden" asp-for="ImageFilePath" />
+                </div>
+
+            </div>
+            <div class="form-group">
+	            <label class="control-label">Image:</label>
+	            <input type="file" name="Image" class="form-control" />
+	            <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Skills" class="control-label">Skills:</label>
+                <select asp-for="Skills" class="form-control" asp-items="ViewBag.SkillDdlItems" multiple="multiple">
+                </select>
+                <span asp-validation-for="Skills" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary mt-3" />
+        <a asp-action="ListAdmin" class="btn btn-outline-primary mt-3">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

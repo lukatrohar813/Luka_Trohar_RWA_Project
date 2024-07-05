@@ -1,0 +1,79 @@
+﻿
+
+.card {
+    width: 300px; 
+    height: 350px; 
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    transition: box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.card-text {
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+    color: #6c757d;
+}
+
+.card-body {
+    padding: 0.5rem;
+    flex-grow: 1;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    padding: 0.4rem;
+    text-align: right;
+}
+
+    .card-footer .btn {
+        margin-left: 0.3rem;
+        font-size: 0.8rem;
+    }
+
+.card img {
+    width: 100%;
+    height: auto;
+    max-height: 150px; 
+    margin-bottom: 0.3rem;
+    border-radius: 0.25rem;
+    object-fit: cover; 
+}
+
+.card-compact {
+    padding: 0.4rem;
+    width: 300px; 
+    height: 400px; 
+}
+
+    .card-compact .card-title {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .card-compact .card-text {
+        font-size: 0.75rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .card-compact .card-footer {
+        padding: 0.3rem;
+    }
+
+        .card-compact .card-footer .btn {
+            font-size: 0.75rem;
+        }

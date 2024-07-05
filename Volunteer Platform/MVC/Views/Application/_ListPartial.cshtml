@@ -1,0 +1,64 @@
+﻿@model ICollection<BL.Models.ApplicationDto>
+
+<table id="tblTypes" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().ProjectName)</th>
+            <th>@Html.DisplayNameFor(model => model.First().UserUsername)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Status)</th>
+            <th>@Html.DisplayNameFor(model => model.First().CreatedAt)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">There are no applications currently.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var application in Model)
+            {
+                var rowClass = application.Status switch
+                {
+                    "Approved" => "table-success",
+                    "Pending" => "table-warning",
+                    "Denied" => "table-danger",
+                    _ => ""
+                };
+                <tr class="@rowClass" data-id="@application.Id">
+                    <td>@Html.DisplayFor(modelItem => application.ProjectName)</td>
+                    <td>@Html.DisplayFor(modelItem => application.UserUsername)</td>
+                    <td class="status">@Html.DisplayFor(modelItem => application.Status)</td>
+                    <td>@Html.DisplayFor(modelItem => application.CreatedAt)</td>
+                    <td class="text-end">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-success mx-2 approve-button" data-id="@application.Id">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger mx-2 deny-button" data-id="@application.Id">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<style>
+    .table-success {
+        background-color: lightgreen;
+    }
+
+    .table-warning {
+        background-color: lightyellow;
+    }
+
+    .table-danger {
+        background-color: lightcoral;
+    }
+</style>

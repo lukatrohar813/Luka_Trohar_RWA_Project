@@ -1,0 +1,35 @@
+﻿@model MVC.Models.SkillVM
+
+<div class="modal fade" id="Edit" tabindex="-1" aria-labelledby="EditLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="EditLabel">Edit Skill </h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="editSkillForm" asp-controller="Skill" asp-action="Edit" method="post">
+					<input type="hidden" asp-for="Id" />
+					<div class="mb-3">
+						<label asp-for="Name" class="form-label"></label>
+						<input asp-for="Name" class="form-control border border-1 border-dark" />
+						<span asp-validation-for="Name" class="text-danger"></span>
+					</div>
+					<div class="mb-3">
+						<label asp-for="Description" class="form-label"></label>
+						<input asp-for="Description" class="form-control border border-1 border-dark" />
+						<span asp-validation-for="Description" class="text-danger"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-dark btn-custom">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

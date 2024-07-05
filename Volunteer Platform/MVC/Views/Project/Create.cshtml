@@ -1,0 +1,66 @@
+﻿@model MVC.Models.ProjectCreateVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" id="projectForm">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+	            <label asp-for="StartDate" class="control-label"></label>
+	            <input asp-for="StartDate" class="form-control" id="StartDate" type="datetime-local" />	
+	            <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+	            <label asp-for="EndDate" class="control-label"></label>
+	            <input asp-for="EndDate" class="form-control" id="EndDate" type="datetime-local" />
+	            <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" asp-items="ViewBag.TypeDdlItems" class="form-select">
+                    <option value="">(not selected)</option>
+                </select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="form-label">Image</label>
+                <input asp-for="Image" class="form-control border border-1 border-dark" type="file" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Skills" class="control-label">Skills</label>
+                <select asp-for="Skills" class="form-control" asp-items="ViewBag.SkillDdlItems" multiple="multiple">
+                </select>
+                <span asp-validation-for="Skills" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary mt-3" />
+                <a asp-action="ListAdmin" class="btn btn-outline-primary mt-3">Back to List</a>
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+	<script src="~/js/timeValidation.js"></script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

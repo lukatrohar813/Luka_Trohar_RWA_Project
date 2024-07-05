@@ -1,0 +1,58 @@
+﻿@model ICollection<BL.Models.ApplicationDto>
+
+<table id="tblTypes" class="table">
+	<thead>
+	<tr>
+		<th>@Html.DisplayNameFor(model => model.First().ProjectName)</th>
+		<th>@Html.DisplayNameFor(model => model.First().CreatedAt)</th>
+		<th>@Html.DisplayNameFor(model => model.First().Status)</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	@if (Model == null || !Model.Any())
+	{
+		<tr>
+			<td colspan="4" class="text-center">You currently have no pending applications, go find a project you like and sign up!</td>
+		</tr>
+	}
+	else
+	{
+		@foreach (var application in Model)
+		{
+			var rowClass = application.Status switch
+			{
+				"Approved" => "table-success",
+				"Pending" => "table-warning",
+				"Denied" => "table-danger",
+				_ => ""
+			};
+			<tr class="@rowClass" data-id="@application.Id">
+				<td>@Html.DisplayFor(modelItem => application.ProjectName)</td>
+				<td>@Html.DisplayFor(modelItem => application.CreatedAt)</td>
+				<td>@Html.DisplayFor(modelItem => application.Status)</td>
+				<td colspan="2" class="text-end">
+				</td>
+			</tr>
+		}
+	}
+	</tbody>
+</table>
+
+<div class="text-center mt-3">
+	<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List", "Project")'">Go to Projects</button>
+</div>
+
+<style>
+    .table-success {
+        background-color: lightgreen;
+    }
+
+    .table-warning {
+        background-color: lightyellow;
+    }
+
+    .table-danger {
+        background-color: lightcoral;
+    }
+</style>

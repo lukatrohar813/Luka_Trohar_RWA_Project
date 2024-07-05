@@ -1,0 +1,29 @@
+﻿@model ICollection<MVC.Models.ProjectListVM>
+
+@{
+	var isAdminOrUser = User.IsInRole("Admin") || User.IsInRole("User");
+}
+
+<div class="item-grid row mt-4">
+	@foreach (var project in Model)
+	{
+		var DetailsUrl = Url.Action("Details", "Project", new { id = project.Id });
+		var cardAttributes = isAdminOrUser ? $"class='card' style='cursor:pointer;' onclick=\"location.href='{DetailsUrl}'\"" : "class='card'";
+
+		<div class="col-md-3 col-sm-6 mb-4">
+			<div @Html.Raw(cardAttributes)>
+				<img src="@project.ImageFilePath" class="card-img-top" alt="Item">
+				<div class="card-body">
+					<h5 class="card-title">
+						@project.Name 
+					</h5>
+
+					<p class="card-text">@project.Description</p>
+					<p class="card-text">@Html.DisplayNameFor(model=>project.StartDate): @project.StartDate.ToString("dd-MM-yyyy")</p>
+					<p class="card-text">@Html.DisplayNameFor(model=>project.EndDate): @project.EndDate.ToString("dd-MM-yyyy")</p>
+					<p class="card-text">@project.TypeName</p>
+				</div>
+			</div>
+		</div>
+	}
+</div>
